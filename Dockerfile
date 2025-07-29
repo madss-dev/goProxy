@@ -18,6 +18,12 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
 
+# Copy the binary
 COPY --from=builder /app/goProxy .
+
+# Copy the templates.json file to multiple possible locations the app checks for
+COPY --from=builder /app/src/domains/templates.json ./templates.json
+COPY --from=builder /app/src/domains/ ./domains/
+COPY --from=builder /app/src/domains/ ./src/domains/
 
 CMD ["./goProxy"]
